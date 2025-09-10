@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import { Habit } from '@/types/habit';
-import { Clock, CircleCheck as CheckCircle, Circle, Edit3, Trash2, MoreHorizontal } from 'lucide-react-native';
+import { Clock, CircleCheck as CheckCircle, Circle, CreditCard as Edit3, Trash2, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
 import { BookOpen, Dumbbell, Droplets, Moon, Brain, Zap, Heart, Star } from 'lucide-react-native';
 
 interface HabitCardProps {
