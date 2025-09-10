@@ -92,7 +92,7 @@ const AuthScreen = () => {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
         Alert.alert("Success", "Logged in successfully!");
-        router.push("/home");
+        router.push("/add");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
         Alert.alert("Success", "Registration successful! Please log in.");

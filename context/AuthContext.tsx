@@ -1,6 +1,6 @@
 import React from "react"
 import { auth } from "@/config/firebase"
-import { onAuthStateChanged, User, sendPasswordResetEmail } from "firebase/auth"
+import { onAuthStateChanged, User, sendPasswordResetEmail,signOut } from "firebase/auth"
 import {
   createContext,
   ReactNode,
@@ -38,3 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   return useContext(AUthContext)
 }
+
+ export const logout = async () => {
+    await signOut(auth);
+  };
