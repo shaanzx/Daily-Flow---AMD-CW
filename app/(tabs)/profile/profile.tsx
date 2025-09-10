@@ -192,4 +192,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#EF4444',
   },
-});
+});import * as ImagePicker from "expo-image-picker";
+import { uploadProfileImage, updateUser } from "@/services/userService";
+
+const handlePickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 0.8,
+  });
+
+  if (!result.canceled) {
+    try {
+      const url = await uploadProfileImage(result.assets[0].uri);
+      await updateUser(user?.uid, { photoURL: url });
+      Alert.alert("Success", "Profile picture updated!");
+    } catch (err) {
+      Alert.alert("Error", "Failed to upload image.");
+    }
+  }
+};
