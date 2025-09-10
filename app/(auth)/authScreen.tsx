@@ -23,7 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 // Firebase imports
-import { auth } from "@/firebase";
+import { auth } from "@/config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
