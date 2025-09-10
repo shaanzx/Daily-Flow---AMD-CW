@@ -4,29 +4,45 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import { Habit } from '@/types/habit';
-import { Clock, CircleCheck as CheckCircle, Circle } from 'lucide-react-native';
+import { Clock, CircleCheck as CheckCircle, Circle, Edit3, Trash2, MoreHorizontal } from 'lucide-react-native';
+import { BookOpen, Dumbbell, Droplets, Moon, Brain, Zap, Heart, Star } from 'lucide-react-native';
 
 interface HabitCardProps {
   habit: Habit;
   onToggle: (completed: boolean) => void;
+  onDelete: () => void;
+  onEdit: () => void;
   isCompleted: boolean;
 }
 
 const iconMap: { [key: string]: any } = {
-  'book': require('lucide-react-native').BookOpen,
-  'dumbbell': require('lucide-react-native').Dumbbell,
-  'water': require('lucide-react-native').Droplets,
-  'sleep': require('lucide-react-native').Moon,
-  'meditation': require('lucide-react-native').Brain,
-  'run': require('lucide-react-native').Zap,
-  'heart': require('lucide-react-native').Heart,
-  'star': require('lucide-react-native').Star,
+  'book': BookOpen,
+  'dumbbell': Dumbbell,
+  'water': Droplets,
+  'sleep': Moon,
+  'meditation': Brain,
+  'run': Zap,
+  'heart': Heart,
+  'star': Star,
 };
 
-export default function HabitCard({ habit, onToggle, isCompleted }: HabitCardProps) {
-  const IconComponent = iconMap[habit.icon] || require('lucide-react-native').Circle;
+export default function HabitCard({ habit, onToggle, onDelete, onEdit, isCompleted }: HabitCardProps) {
+  const IconComponent = iconMap[habit.icon] || Star;
+
+  const showOptions = () => {
+    Alert.alert(
+      'Habit Options',
+      'What would you like to do?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Edit', onPress: onEdit },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ]
+    );
+  };
 
   return (
     <View style={[styles.container, isCompleted && styles.completedContainer]}>
@@ -53,12 +69,22 @@ export default function HabitCard({ habit, onToggle, isCompleted }: HabitCardPro
           </View>
         </View>
         
-        <View style={styles.checkContainer}>
-          {isCompleted ? (
-            <CheckCircle size={28} color="#10B981" />
-          ) : (
-            <Circle size={28} color="#CBD5E1" />
-          )}
+        <View style={styles.rightSection}>
+          <TouchableOpacity
+            style={styles.optionsButton}
+            onPress={showOptions}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <MoreHorizontal size={20} color="#94A3B8" />
+          </TouchableOpacity>
+          
+          <View style={styles.checkContainer}>
+            {isCompleted ? (
+              <CheckCircle size={28} color="#10B981" />
+            ) : (
+              <Circle size={28} color="#CBD5E1" />
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     </View>
@@ -73,10 +99,10 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 4,
     elevation: 3,
   },
   completedContainer: {
@@ -136,7 +162,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
   },
+  rightSection: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  optionsButton: {
+    padding: 4,
+  },
   checkContainer: {
-    marginLeft: 12,
+    marginLeft: 8,
   },
 });
