@@ -14,7 +14,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
 import { HabitService } from '@/services/habitService';
 import { Habit } from '@/types/habit';
-import { Edit3, BookOpen, Dumbbell, Droplets, Moon, Brain, Zap, Heart, Star, ArrowLeft } from 'lucide-react-native';
+import { CreditCard as Edit3, BookOpen, Dumbbell, Droplets, Moon, Brain, Zap, Heart, Star, ArrowLeft } from 'lucide-react-native';
 
 const HABIT_ICONS = [
   { key: 'book', icon: BookOpen, label: 'Reading' },
