@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
@@ -273,6 +274,9 @@ export default function AddHabitScreen() {
             <Text style={styles.createButtonText}>
               {loading ? '⏳ Creating Habit...' : '🚀 Create Habit'}
             </Text>
+            {loading && (
+              <ActivityIndicator size="small" color="white" />
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

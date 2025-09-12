@@ -22,7 +22,6 @@ export default function HomeScreen() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
 
   const loadHabits = async () => {
     if (!user) return;
@@ -79,6 +78,10 @@ export default function HomeScreen() {
     );
   };
 
+  const handleEditHabit = (habitId: string) => {
+    router.push(`/edit-habit?id=${habitId}`);
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await loadHabits();
@@ -89,9 +92,11 @@ export default function HomeScreen() {
     loadHabits();
   }, [user]);
 
+  // Filter habits that should be active today
   const today = HabitService.getTodayString();
-  const completedCount = habits.filter(habit => habit.completions[today]).length;
-  const completionRate = habits.length > 0 ? Math.round((completedCount / habits.length) * 100) : 0;
+  const todaysHabits = habits.filter(habit => HabitService.isHabitActiveToday(habit));
+  const completedCount = todaysHabits.filter(habit => habit.completions[today]).length;
+  const completionRate = todaysHabits.length > 0 ? Math.round((completedCount / todaysHabits.length) * 100) : 0;
   
   // Calculate streak
   const streak = HabitService.calculateStreak(habits);
@@ -102,7 +107,7 @@ export default function HomeScreen() {
   const stats = [
     { 
       title: 'Today\'s Progress', 
-      value: `${completedCount}/${habits.length}`, 
+      value: `${completedCount}/${todaysHabits.length}`, 
       percentage: completionRate,
       icon: Target,
       color: '#3B82F6'
@@ -110,7 +115,7 @@ export default function HomeScreen() {
     { 
       title: 'Current Streak', 
       value: `${streak} days`, 
-      percentage: streak > 0 ? 100 : 0,
+      percentage: streak > 0 ? Math.min(streak * 10, 100) : 0,
       icon: Flame,
       color: '#F59E0B'
     },
@@ -122,6 +127,13 @@ export default function HomeScreen() {
       color: '#10B981'
     },
   ];
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning! 🌅';
+    if (hour < 17) return 'Good afternoon! ☀️';
+    return 'Good evening! 🌙';
+  };
 
   if (loading) {
     return (
@@ -139,7 +151,7 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.greeting}>Good morning!</Text>
+            <Text style={styles.greeting}>{getGreeting()}</Text>
             <Text style={styles.date}>
               {new Date().toLocaleDateString('en-US', { 
                 weekday: 'long', 
@@ -158,7 +170,7 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.statsSection}>
-        <Text style={styles.sectionTitle}>Your Progress</Text>
+        <Text style={styles.sectionTitle}>📊 Your Progress</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.statsScroll}>
           {stats.map((stat, index) => (
             <StatsCard key={index} {...stat} />
@@ -166,53 +178,40 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
 
-      <View style={styles.periodSelector}>
-        {(['daily', 'weekly', 'monthly'] as const).map((period) => (
-          <TouchableOpacity
-            key={period}
-            style={[
-              styles.periodButton,
-              selectedPeriod === period && styles.periodButtonActive
-            ]}
-            onPress={() => setSelectedPeriod(period)}
-          >
-            <Text style={[
-              styles.periodText,
-              selectedPeriod === period && styles.periodTextActive
-            ]}>
-              {period.charAt(0).toUpperCase() + period.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <View style={styles.habitsSection}>
-        <Text style={styles.sectionTitle}>Today's Habits</Text>
-        {habits.length === 0 ? (
+        <Text style={styles.sectionTitle}>
+          🎯 Today's Habits ({completedCount}/{todaysHabits.length})
+        </Text>
+        {todaysHabits.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Target size={48} color="#CBD5E1" />
-            <Text style={styles.emptyTitle}>No habits yet</Text>
+            <Text style={styles.emptyEmoji}>🎯</Text>
+            <Text style={styles.emptyTitle}>No habits for today</Text>
             <Text style={styles.emptySubtitle}>
-              Start building healthy habits by adding your first one!
+              {habits.length === 0 
+                ? "Start building healthy habits by adding your first one!"
+                : "All your habits are scheduled for other days. Great job staying organized!"
+              }
             </Text>
             <TouchableOpacity 
               style={styles.emptyButton}
               onPress={() => router.push('/(tabs)/add')}
             >
               <Plus size={20} color="#FFFFFF" />
-              <Text style={styles.emptyButtonText}>Add Your First Habit</Text>
+              <Text style={styles.emptyButtonText}>
+                {habits.length === 0 ? 'Add Your First Habit' : 'Add Another Habit'}
+              </Text>
             </TouchableOpacity>
           </View>
         ) : (
           <FlatList
-            data={habits}
+            data={todaysHabits}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <HabitCard
                 habit={item}
                 onToggle={(completed) => handleToggleHabit(item.id, completed)}
                 onDelete={() => handleDeleteHabit(item.id)}
-                onEdit={() => router.push(`/(tabs)/edit/${item.id}`)}
+                onEdit={() => handleEditHabit(item.id)}
                 isCompleted={item.completions[today] || false}
               />
             )}
@@ -221,6 +220,28 @@ export default function HomeScreen() {
           />
         )}
       </View>
+
+      {habits.length > todaysHabits.length && (
+        <View style={styles.allHabitsSection}>
+          <Text style={styles.sectionTitle}>📅 All Your Habits</Text>
+          <FlatList
+            data={habits}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <HabitCard
+                habit={item}
+                onToggle={(completed) => handleToggleHabit(item.id, completed)}
+                onDelete={() => handleDeleteHabit(item.id)}
+                onEdit={() => handleEditHabit(item.id)}
+                isCompleted={item.completions[today] || false}
+                showFrequency={true}
+              />
+            )}
+            scrollEnabled={false}
+            contentContainerStyle={styles.habitsList}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -234,6 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F8FAFC',
   },
   loadingText: {
     fontSize: 16,
@@ -244,6 +266,13 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 24,
     backgroundColor: '#FFFFFF',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   headerTop: {
     flexDirection: 'row',
@@ -287,40 +316,17 @@ const styles = StyleSheet.create({
     marginHorizontal: -24,
     paddingHorizontal: 24,
   },
-  periodSelector: {
-    flexDirection: 'row',
-    marginHorizontal: 24,
-    marginBottom: 24,
-    backgroundColor: '#F1F5F9',
-    borderRadius: 12,
-    padding: 4,
-  },
-  periodButton: {
-    flex: 1,
-    paddingVertical: 8,
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  periodButtonActive: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  periodText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#64748B',
-  },
-  periodTextActive: {
-    color: '#1E293B',
-    fontWeight: '600',
-  },
   habitsSection: {
     paddingHorizontal: 24,
     paddingBottom: 24,
+  },
+  allHabitsSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#E2E8F0',
+    marginTop: 12,
+    paddingTop: 24,
   },
   habitsList: {
     gap: 12,
@@ -328,12 +334,18 @@ const styles = StyleSheet.create({
   emptyContainer: {
     alignItems: 'center',
     paddingVertical: 48,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    marginVertical: 8,
+  },
+  emptyEmoji: {
+    fontSize: 48,
+    marginBottom: 16,
   },
   emptyTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1E293B',
-    marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
@@ -341,6 +353,8 @@ const styles = StyleSheet.create({
     color: '#64748B',
     textAlign: 'center',
     marginBottom: 24,
+    paddingHorizontal: 32,
+    lineHeight: 22,
   },
   emptyButton: {
     flexDirection: 'row',
@@ -350,6 +364,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   emptyButtonText: {
     color: '#FFFFFF',

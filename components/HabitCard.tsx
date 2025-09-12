@@ -7,8 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import { Habit } from '@/types/habit';
-import { Clock, CircleCheck as CheckCircle, Circle, CreditCard as Edit3, Trash2, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
-import { BookOpen, Dumbbell, Droplets, Moon, Brain, Zap, Heart, Star } from 'lucide-react-native';
+import { Clock, CircleCheck as CheckCircle, Circle, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
 
 interface HabitCardProps {
   habit: Habit;
@@ -16,32 +15,63 @@ interface HabitCardProps {
   onDelete: () => void;
   onEdit: () => void;
   isCompleted: boolean;
+  showFrequency?: boolean;
 }
 
-const iconMap: { [key: string]: any } = {
-  'book': BookOpen,
-  'dumbbell': Dumbbell,
-  'water': Droplets,
-  'sleep': Moon,
-  'meditation': Brain,
-  'run': Zap,
-  'heart': Heart,
-  'star': Star,
+const HABIT_EMOJIS: { [key: string]: string } = {
+  'reading': '📚',
+  'exercise': '💪',
+  'water': '💧',
+  'sleep': '🛌',
+  'meditation': '🧘',
+  'running': '🏃',
+  'healthy-food': '🥗',
+  'study': '📖',
+  'music': '🎵',
+  'work': '💼',
+  'creative': '🎨',
+  'social': '👥',
 };
 
-export default function HabitCard({ habit, onToggle, onDelete, onEdit, isCompleted }: HabitCardProps) {
-  const IconComponent = iconMap[habit.icon] || Star;
+const FREQUENCY_LABELS: { [key: string]: string } = {
+  'daily': 'Daily',
+  'weekdays': 'Weekdays',
+  'weekends': 'Weekends',
+  'weekly': 'Weekly',
+};
+
+export default function HabitCard({ 
+  habit, 
+  onToggle, 
+  onDelete, 
+  onEdit, 
+  isCompleted, 
+  showFrequency = false 
+}: HabitCardProps) {
+  const habitEmoji = HABIT_EMOJIS[habit.icon] || '⭐';
 
   const showOptions = () => {
     Alert.alert(
       'Habit Options',
-      'What would you like to do?',
+      `What would you like to do with "${habit.title}"?`,
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Edit', onPress: onEdit },
         { text: 'Delete', style: 'destructive', onPress: onDelete },
       ]
     );
+  };
+
+  const formatTime = (time: string) => {
+    // Handle different time formats
+    if (time.includes(':')) {
+      const [hours, minutes] = time.split(':');
+      const hour = parseInt(hours);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+      return `${displayHour}:${minutes} ${ampm}`;
+    }
+    return time;
   };
 
   return (
@@ -53,7 +83,7 @@ export default function HabitCard({ habit, onToggle, onDelete, onEdit, isComplet
       >
         <View style={styles.leftSection}>
           <View style={[styles.iconContainer, isCompleted && styles.iconContainerCompleted]}>
-            <IconComponent size={20} color={isCompleted ? '#FFFFFF' : '#3B82F6'} />
+            <Text style={styles.emoji}>{habitEmoji}</Text>
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.title, isCompleted && styles.completedTitle]}>
@@ -62,9 +92,18 @@ export default function HabitCard({ habit, onToggle, onDelete, onEdit, isComplet
             <Text style={[styles.description, isCompleted && styles.completedDescription]}>
               {habit.description}
             </Text>
-            <View style={styles.timeContainer}>
-              <Clock size={12} color="#64748B" />
-              <Text style={styles.time}>{habit.time}</Text>
+            <View style={styles.metaContainer}>
+              <View style={styles.timeContainer}>
+                <Clock size={12} color="#64748B" />
+                <Text style={styles.time}>{formatTime(habit.time)}</Text>
+              </View>
+              {showFrequency && (
+                <View style={styles.frequencyContainer}>
+                  <Text style={styles.frequency}>
+                    {FREQUENCY_LABELS[habit.frequency] || 'Daily'}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -121,15 +160,21 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#EFF6FF',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#F8FAFC',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#E2E8F0',
   },
   iconContainerCompleted: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#DCFCE7',
+    borderColor: '#10B981',
+  },
+  emoji: {
+    fontSize: 20,
   },
   textContainer: {
     flex: 1,
@@ -147,20 +192,39 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: '#64748B',
+    lineHeight: 18,
   },
   completedDescription: {
     textDecorationLine: 'line-through',
     color: '#94A3B8',
   },
+  metaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 4,
+  },
   timeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 2,
   },
   time: {
     fontSize: 12,
     color: '#64748B',
+    fontWeight: '500',
+  },
+  frequencyContainer: {
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  frequency: {
+    fontSize: 10,
+    color: '#475569',
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
   rightSection: {
     alignItems: 'center',
