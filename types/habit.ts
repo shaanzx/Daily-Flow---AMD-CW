@@ -4,6 +4,7 @@ export interface Habit {
   description: string;
   time: string;
   icon: string;
+  frequency: 'daily' | 'weekdays' | 'weekends' | 'weekly';
   userId: string;
   createdAt: Date;
   completions: { [date: string]: boolean };
@@ -14,4 +15,5 @@ export interface HabitInput {
   description: string;
   time: string;
   icon: string;
+  frequency: 'daily' | 'weekdays' | 'weekends' | 'weekly';
 }
