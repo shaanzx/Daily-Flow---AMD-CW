@@ -1,4 +1,5 @@
 export interface Habit {
+  name: ReactNode;
   id: string;
   title: string;
   description: string;
