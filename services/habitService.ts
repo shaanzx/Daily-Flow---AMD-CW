@@ -8,7 +8,8 @@ import {
   getDoc,
   query, 
   where, 
-  orderBy 
+  orderBy,
+  onSnapshot
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { Habit, HabitInput } from '@/types/habit';
@@ -219,5 +220,23 @@ export class HabitService {
     const average = weeks.length > 0 ? Math.round(weeks.reduce((sum, week) => sum + week, 0) / weeks.length) : 0;
     
     return { average, weeks };
+  }
+
+  static subscribeUserHabits(userId: string, callback: (habits: Habit[]) => void) {
+    const q = query(
+      collection(db, 'habits'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'asc')
+    );
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const habits: Habit[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Habit));
+      callback(habits);
+    });
+
+    return unsubscribe; // Call this to stop listening
   }
 }

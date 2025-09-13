@@ -46,6 +46,18 @@ export default function HomeScreen() {
     }
   };
 
+  useEffect(() => {
+  if (!user) return;
+
+  setLoading(true);
+  const unsubscribe = HabitService.subscribeUserHabits(user.uid, (userHabits) => {
+    setHabits(userHabits);
+    setLoading(false);
+  });
+
+  return () => unsubscribe(); // Clean up listener on unmount
+}, [user]);
+
   const handleDeleteHabit = async (habitId: string) => {
     Alert.alert(
       'Delete Habit',

@@ -11,7 +11,7 @@ const Index = () => {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        router.push("/add")
+        router.push("/(tabs)")
       } else {
         router.push("/(auth)/authScreen")
       }

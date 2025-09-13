@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface Habit {
   name: ReactNode;
   id: string;

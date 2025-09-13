@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { Habit } from '@/types/habit';
+import React, { useEffect, useState } from 'react';
 import {
+  KeyboardAvoidingView,
   Modal,
-  View,
+  Platform,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
+  View,
 } from 'react-native';
-import { Habit } from '@/types/habit';
 
 const HABIT_ICONS = [
   { key: 'reading', emoji: '📚', label: 'Reading' },
@@ -63,7 +63,7 @@ export default function UpdateHabitModal({
   const [selectedIcon, setSelectedIcon] = useState('reading');
   const [selectedTime, setSelectedTime] = useState('07:00');
   const [customTime, setCustomTime] = useState('');
-  const [frequency, setFrequency] = useState('daily');
+  const [frequency, setFrequency] = useState<Habit['frequency']>('daily');
 
   useEffect(() => {
     if (habit) {
@@ -175,7 +175,7 @@ export default function UpdateHabitModal({
               <TouchableOpacity
                 key={key}
                 style={[styles.frequencyOption, frequency === key && styles.frequencyOptionSelected]}
-                onPress={() => setFrequency(key)}
+                onPress={() => setFrequency(key as Habit['frequency'])}
               >
                 <View style={styles.frequencyContent}>
                   <Text style={[styles.frequencyLabel, frequency === key && styles.frequencyLabelSelected]}>
