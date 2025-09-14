@@ -49,6 +49,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="chatScreen"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ size, color }) => (
+            <BarChart3 size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -32,7 +32,7 @@ import {
 } from 'lucide-react-native';
 
 export default function ProfileScreen() {
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -48,7 +48,7 @@ export default function ProfileScreen() {
     setLoading(false);
   });
 
-  return () => unsubscribe(); // cleanup when screen unmount
+  return () => unsubscribe(); 
 }, [user]);
 
   const loadUserData = async () => {
@@ -84,7 +84,7 @@ export default function ProfileScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await signOut();
+              await logout();
             } catch (error) {
               Alert.alert('Error', 'Failed to sign out');
             }
@@ -94,7 +94,6 @@ export default function ProfileScreen() {
     );
   };
 
-  // Calculate real statistics
   const today = HabitService.getTodayString();
   const todaysHabits = habits.filter(habit => HabitService.isHabitActiveToday(habit));
   const completedToday = todaysHabits.filter(habit => habit.completions[today]).length;
@@ -102,12 +101,10 @@ export default function ProfileScreen() {
   const streak = HabitService.calculateStreak(habits);
   const weeklyStats = HabitService.getWeeklyStats(habits);
 
-  // Calculate total completions
   const totalCompletions = habits.reduce((total, habit) => {
     return total + Object.values(habit.completions).filter(Boolean).length;
   }, 0);
 
-  // Calculate best streak
   const bestStreak = Math.max(streak, 0);
 
   const stats = [
@@ -166,7 +163,6 @@ export default function ProfileScreen() {
         <Text style={styles.name}>{getUserDisplayName()}</Text>
         <Text style={styles.email}>{user?.email || 'demo@example.com'}</Text>
         
-        {/* Quick Stats in Header */}
         <View style={styles.headerStats}>
           <View style={styles.headerStat}>
             <Text style={styles.headerStatValue}>{completedToday}</Text>

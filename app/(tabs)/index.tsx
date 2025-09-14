@@ -24,7 +24,6 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // 🔥 Update modal state
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
 
@@ -55,7 +54,7 @@ export default function HomeScreen() {
     setLoading(false);
   });
 
-  return () => unsubscribe(); // Clean up listener on unmount
+  return () => unsubscribe(); 
 }, [user]);
 
   const handleDeleteHabit = async (habitId: string) => {
@@ -122,17 +121,14 @@ export default function HomeScreen() {
     setRefreshing(false);
   };
 
-  // Filter habits that should be active today
   const today = HabitService.getTodayString();
   const todaysHabits = habits.filter(habit => HabitService.isHabitActiveToday(habit));
   const completedCount = todaysHabits.filter(habit => habit.completions[today]).length;
   const completionRate =
     todaysHabits.length > 0 ? Math.round((completedCount / todaysHabits.length) * 100) : 0;
 
-  // Calculate streak
   const streak = HabitService.calculateStreak(habits);
 
-  // Calculate weekly stats
   const weeklyStats = HabitService.getWeeklyStats(habits);
 
   const stats = [
@@ -238,7 +234,7 @@ export default function HomeScreen() {
                 habit={item}
                 onToggle={(completed) => handleToggleHabit(item.id, completed)}
                 onDelete={() => handleDeleteHabit(item.id)}
-                onEdit={() => handleEditHabit(item)} // ✅ FIXED
+                onEdit={() => handleEditHabit(item)}
                 isCompleted={item.completions[today] || false}
               />
             )}
@@ -259,7 +255,7 @@ export default function HomeScreen() {
                 habit={item}
                 onToggle={(completed) => handleToggleHabit(item.id, completed)}
                 onDelete={() => handleDeleteHabit(item.id)}
-                onEdit={() => handleEditHabit(item)} // ✅ FIXED
+                onEdit={() => handleEditHabit(item)}
                 isCompleted={item.completions[today] || false}
                 showFrequency={true}
               />
@@ -270,7 +266,6 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* 🔥 Update Modal */}
       <UpdateHabitModal
         visible={modalVisible}
         habit={selectedHabit}

@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     })
     return unsubcribe
   }, [])
+    const logout = async () => {
+    await signOut(auth);
+  };
 
   return (
     <AUthContext.Provider value={{ user, loading }}>
@@ -39,6 +42,4 @@ export const useAuth = () => {
   return useContext(AUthContext)
 }
 
- export const logout = async () => {
-    await signOut(auth);
-  };
+

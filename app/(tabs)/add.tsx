@@ -135,7 +135,6 @@ export default function AddHabitScreen() {
         </View>
 
         <View style={styles.form}>
-          {/* Habit Title */}
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>✨ What's your habit?</Text>
             <TextInput
@@ -147,7 +146,6 @@ export default function AddHabitScreen() {
             />
           </View>
 
-          {/* Description */}
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>📝 Add details (optional)</Text>
             <TextInput
@@ -161,7 +159,6 @@ export default function AddHabitScreen() {
             />
           </View>
 
-          {/* Icon Selection */}
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>🎯 Choose an icon</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconsScrollView}>
@@ -188,7 +185,6 @@ export default function AddHabitScreen() {
             </ScrollView>
           </View>
 
-          {/* Time Selection */}
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>⏰ When will you do it?</Text>
             <View style={styles.timeContainer}>
@@ -228,7 +224,6 @@ export default function AddHabitScreen() {
             )}
           </View>
 
-          {/* Frequency Selection */}
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>🔄 How often?</Text>
             <View style={styles.frequencyContainer}>

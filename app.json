@@ -55,7 +55,8 @@
       "router": {},
       "eas": {
         "projectId": "629642fc-c431-4530-b484-616e5f9b815e"
-      }
+      },
+      "HF_API_KEY": "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"
     }
   }
 }

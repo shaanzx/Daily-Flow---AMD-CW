@@ -1,4 +1,3 @@
-// AuthScreen.tsx
 import {
   View,
   Text,
@@ -22,7 +21,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-// Firebase imports
 import { auth } from "@/config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -40,12 +38,10 @@ const AuthScreen = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
-  // Password reset modal states
   const [resetModalVisible, setResetModalVisible] = useState<boolean>(false);
   const [resetEmail, setResetEmail] = useState<string>("");
   const [isResetLoading, setIsResetLoading] = useState<boolean>(false);
 
-  // Animation values
   const inputScale = useSharedValue(1);
   const buttonScale = useSharedValue(1);
 
@@ -73,7 +69,6 @@ const AuthScreen = () => {
     buttonScale.value = withTiming(1, { duration: 100 });
   };
 
-  // Auth handlers (login/register)
   const handleAuth = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please fill in all fields");
@@ -118,7 +113,6 @@ const AuthScreen = () => {
     }
   };
 
-  // Password reset function
   const handlePasswordReset = async () => {
     if (!resetEmail) {
       Alert.alert("Error", "Please enter your email address.");
@@ -167,7 +161,6 @@ const AuthScreen = () => {
             Sign in/up to enjoy the best managing experience
           </Text>
 
-          {/* Login/Register Toggle */}
           <View className="flex-row justify-around mb-6">
             <TouchableOpacity
               onPress={() => setIsLogin(true)}
@@ -187,7 +180,6 @@ const AuthScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Email Input */}
           <Animated.View style={animatedInputStyle} className="mb-4">
             <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
               <Feather name="mail" size={20} color="#6B7280" />
@@ -205,7 +197,6 @@ const AuthScreen = () => {
             </View>
           </Animated.View>
 
-          {/* Password Input */}
           <Animated.View style={animatedInputStyle} className="mb-4">
             <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
               <Feather name="lock" size={20} color="#6B7280" />
@@ -247,7 +238,6 @@ const AuthScreen = () => {
             </Animated.View>
           )}
 
-          {/* Remember Me and Forgot Password */}
           <View className="flex-row justify-between mb-4">
             <View className="flex-row items-center">
               <Switch
@@ -263,7 +253,6 @@ const AuthScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Login/Register Button */}
           <Animated.View style={animatedButtonStyle}>
             <TouchableOpacity
               onPress={handleAuth}
@@ -284,7 +273,6 @@ const AuthScreen = () => {
             </TouchableOpacity>
           </Animated.View>
 
-          {/* Social Login (kept as-is) */}
           <View className="mt-6">
             <Text className="text-center text-gray-600 mb-4">Or login with</Text>
             <View className="flex-row justify-around">
@@ -304,7 +292,6 @@ const AuthScreen = () => {
           </View>
         </View>
 
-        {/* Password Reset Modal */}
         <Modal
           visible={resetModalVisible}
           transparent
