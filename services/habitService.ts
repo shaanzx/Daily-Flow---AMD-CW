@@ -237,6 +237,6 @@ export class HabitService {
       callback(habits);
     });
 
-    return unsubscribe; // Call this to stop listening
+    return unsubscribe; 
   }
 }

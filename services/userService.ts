@@ -1,8 +1,6 @@
-// services/userService.ts
 import { db } from "@/config/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
-// Firestore
 export const getUser = async (uid: string) => {
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
@@ -14,7 +12,6 @@ export const updateUser = async (uid: string, data: any) => {
   await updateDoc(docRef, data);
 };
 
-// Cloudinary Upload
 export const uploadProfileImage = async (imageUri: string) => {
   const formData = new FormData();
   formData.append("file", {
