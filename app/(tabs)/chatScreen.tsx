@@ -17,6 +17,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 
 const HF_API_KEY = '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'; 
 
+//Model
 const HF_MODEL = 'gpt2-medium'; 
 interface Message {
   id: string;
