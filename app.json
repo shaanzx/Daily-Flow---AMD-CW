@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "amd-day-01",
-    "slug": "amd-day-01",
+    "name": "Daily Flow",
+    "slug": "daily-flow-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "amdday01",
+    "scheme": "dailyflow",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -21,7 +21,7 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.shaanzx.amdday01"
+      "package": "com.shaanzx.dailyflow"
     },
     "web": {
       "bundler": "metro",
@@ -54,7 +54,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "629642fc-c431-4530-b484-616e5f9b815e"
+        "projectId": "d32ff9c2-8584-4ffb-a93d-92fd58a0d483"
       },
       "HF_API_KEY": "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"
     }
