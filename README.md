@@ -55,7 +55,7 @@ A beautiful, modern habit tracking application built with React Native and Expo.
 
 3. **Start the development server**
    ```bash
-   npx expo start
+   npm start
    ```
 
 4. **Run on your device**
@@ -71,9 +71,8 @@ app/
 ├── (tabs)/                 # Tab navigation screens
 │   ├── index.tsx          # Home dashboard
 │   ├── add.tsx            # Add new habit
-│   ├── stats.tsx          # Statistics & analytics
+│   ├── chatScreen.tsx     # AI chat
 │   └── profile.tsx        # User profile
-├── edit-habit.tsx         # Edit existing habit
 ├── _layout.tsx            # Root layout
 └── +not-found.tsx         # 404 error page
 
@@ -238,9 +237,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: support@habittracker.app
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/habit-tracker-app/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/habit-tracker-app/discussions)
+- 📧 Email: shaanz11.11@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/shaanzx)
 
 ## 🗺️ Roadmap
 
