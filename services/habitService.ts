@@ -83,17 +83,17 @@ export class HabitService {
 
   static isHabitActiveToday(habit: Habit): boolean {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const dayOfWeek = today.getDay();
     
     switch (habit.frequency) {
       case 'daily':
         return true;
       case 'weekdays':
-        return dayOfWeek >= 1 && dayOfWeek <= 5; // Monday to Friday
+        return dayOfWeek >= 1 && dayOfWeek <= 5; 
       case 'weekends':
-        return dayOfWeek === 0 || dayOfWeek === 6; // Saturday and Sunday
+        return dayOfWeek === 0 || dayOfWeek === 6; 
       case 'weekly':
-        return true; // User can complete once per week
+        return true; 
       default:
         return true;
     }
@@ -110,7 +110,6 @@ export class HabitService {
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split('T')[0];
       
-      // Filter habits that should be active on this date
       const activeHabits = habits.filter(habit => {
         const habitDate = new Date(date);
         const dayOfWeek = habitDate.getDay();
@@ -123,7 +122,7 @@ export class HabitService {
           case 'weekends':
             return dayOfWeek === 0 || dayOfWeek === 6;
           case 'weekly':
-            return true; // Consider weekly habits active every day for streak calculation
+            return true; 
           default:
             return true;
         }
@@ -132,7 +131,7 @@ export class HabitService {
       const completedHabits = activeHabits.filter(habit => habit.completions[dateString]);
       const completionRate = activeHabits.length > 0 ? completedHabits.length / activeHabits.length : 0;
       
-      if (completionRate >= 0.5) { // At least 50% of active habits completed
+      if (completionRate >= 0.5) { 
         streak++;
       } else {
         break;
@@ -152,7 +151,6 @@ export class HabitService {
       const dateString = date.toISOString().split('T')[0];
       const dayOfWeek = date.getDay();
       
-      // Filter habits that should be active on this date
       const activeHabits = habits.filter(habit => {
         switch (habit.frequency) {
           case 'daily':
@@ -192,7 +190,6 @@ export class HabitService {
         const dateString = date.toISOString().split('T')[0];
         const dayOfWeek = date.getDay();
         
-        // Filter habits that should be active on this date
         const activeHabits = habits.filter(habit => {
           switch (habit.frequency) {
             case 'daily':

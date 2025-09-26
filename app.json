@@ -53,10 +53,11 @@
     },
     "extra": {
       "router": {},
+      "HF_API_KEY": "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",
       "eas": {
-        "projectId": "d32ff9c2-8584-4ffb-a93d-92fd58a0d483"
-      },
-      "HF_API_KEY": "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"
-    }
+        "projectId": "f1477493-1f1d-4d48-9fb7-bc9916e105ff"
+      }
+    },
+    "owner": "shaaanzx"
   }
 }
