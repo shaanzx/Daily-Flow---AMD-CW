@@ -4,6 +4,10 @@ A beautiful, modern habit tracking application built with React Native and Expo.
 
 ![Habit Tracker](https://images.pexels.com/photos/6147094/pexels-photo-6147094.jpeg?auto=compress&cs=tinysrgb&w=800)
 
+![Download the app resources](https://drive.google.com/drive/folders/1TFcAnS_-5VaQUMjJz5o3AogJRJZqXM2H?usp=sharing))
+
+![Watch Demo Video](https://www.youtube.com/shorts/avFGbJADSSs)
+
 ## ✨ Features
 
 ### 🏠 **Smart Dashboard**
